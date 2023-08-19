@@ -22,3 +22,5 @@
 2. [Руководители](Scenarios/05_header.md)
 3. [Техники](Scenarios/06_teckAdmin.md)
 
+---
+<p align="right"><a href="13_baseArc.md">[Далее]</p>
