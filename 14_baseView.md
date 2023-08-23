@@ -14,3 +14,6 @@
 3.	[Многозадачности](CommonViews/multitask.md)
 4.	[Инфраструктурное](CommonViews/infrastructure.md)
 5.	[Безопасности](CommonViews/safety.md)
+
+---
+<p align="right"><a href="15_Risks.md">[Далее]</p>
