@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: Мебельная фабрика, Продукт
+  description: >-
+    Это микросервис, призванный получить и отдавать данные о продуктах фирмы ЭН.
+    Фирма ЭН гарантирует качетво и надежность своих Продуктов, коими являются
+    предметы мебели, неусщие Вам радость и счастье.
+  termsOfService: http://FIRM-EN.com/terms/
+  contact:
+    email: mainManager@firm-en.com
+  license:
+    name: Firm-EN
+    url: http://FIRM-EN.com/terms/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: О нас
+  url: http://FIRM-EN.com/about/
+servers:
+  - url: https://products.firm-en.com/api/v1
+tags:
+  - name: product
+    description: Everything about your Products
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+
+paths:
+  /products/:
+    get:
+      tags:
+        - product
+      summary: Take all product by filters
+      description: Returns group of products by filters
+      operationId: getProducts
+      parameters:
+        - name: color
+          in: query
+          description: Color of products
+          required: false
+          schema:
+            type: string
+        - name: height
+          in: query
+          description: height of products
+          required: false
+          schema:
+            type: integer
+        - name: length
+          in: query
+          description: length of products
+          required: false
+          schema:
+            type: integer
+        - name: field
+          in: query
+          description: field of products
+          required: false
+          schema:
+            type: integer
+        - name: cost
+          in: query
+          description: cost of products
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid data operations supplied
+        '401':
+          description: Unauthorized! В данном сервисе не критичен, но в Закеазах - строго обязательно быть авторизованным в системе. Не надо смотреть чужие заказы. 
+        '404':
+          description: Products not found
+        '500':
+          description: Server is not available, try later. Я не знаю, что там сломалось, но что-то с сервером не так. 
+        '503': 
+          description: Time out exception. Сервер не ответил вообще. Он спит. Пробуйте на резерв. Ну или ждите, пока проснется администратор и всё починит
+        '504': 
+          description: Time out exception. Try again later. Сервер жив и даже подает признаки работы, но думает ОЧЕНЬ долго. Возможно, он общается с кем-то не очень умным. Смените себе интернет и не сидите с утюга. 
+ 
+  /products/{productId}:
+    get:
+      tags:
+        - product
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid ID supplied. Данные в фильтре не соответствуют ожидаемым.
+        '401':
+          description: Unauthorized! В данном сервисе не критичен, но в Закеазах - строго обязательно быть авторизованным в системе. Не надо смотреть чужие заказы. 
+        '404':
+          description: Product not found. Товар не найдет.
+        '500':
+          description: Server is not available, try later. Я не знаю, что там сломалось, но что-то с сервером не так.
+        '503': 
+          description: Time out exception. Сервер не ответил вообще. Он спит. Пробуйте на резерв. Ну или ждите, пока проснется администратор и всё починит
+        '504': 
+          description: Time out exception. Try again later. Сервер жив и даже подает признаки работы, но думает ОЧЕНЬ долго. Возможно, он общается с кем-то не очень умным. Смените себе интернет и не сидите с утюга. 
+
+
+  /products/{productId}/edit:
+    post:
+      tags:
+        - product
+      summary: Edit product by ID
+      description: Edit a single product
+      operationId: editProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new document in the base
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid DATA supplied. Не вводите в формы всякую дичь.
+        '401':
+          description: Unauthorized! Cтрого обязательно быть авторизованным в системе. Не надо всяким проходимцам менять цену товара.
+        '404':
+          description: Product not found. Товар не найдет.
+        '500':
+          description: Server is not available, try later. Я не знаю, что там сломалось, но что-то с сервером не так.
+        '503': 
+          description: Time out exception. Сервер не ответил вообще. Он спит. Пробуйте на резерв. Ну или ждите, пока проснется администратор и всё починит
+        '504': 
+          description: Time out exception. Try again later. Сервер жив и даже подает признаки работы, но думает ОЧЕНЬ долго. Возможно, он общается с кем-то не очень умным. Смените себе интернет и не сидите с утюга. 
+
+components:
+  schemas:
+    Product:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Шкаф
+        color:
+          type: string
+          example: Зеленый
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        length:
+          type: integer
+          format: int64
+          example: 100
+        height:
+          type: integer
+          format: int64
+          example: 15
+        field:
+          type: integer
+          format: int64
+          example: 200
+        material:
+          type: string
+          example: алюминий
+        cost:
+          type: integer
+          format: int64
+          example: 15000
+        comment:
+          type: string
+          description: pet status in the store
+      xml:
+        name: product
